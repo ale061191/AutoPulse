@@ -8,15 +8,22 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { setError(error.message); return }
-    router.push('/')
-    router.refresh()
+    setLoading(true)
+    setError('')
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) { setError(error.message); return }
+      router.push('/')
+      router.refresh()
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -37,8 +44,8 @@ export default function LoginPage() {
             required
           />
           {error && <p className="text-red-400 text-sm">{error}</p>}
-          <button type="submit" className="w-full p-3 rounded-lg bg-[#9C5F43] text-white font-semibold hover:bg-[#b8775a]">
-            Iniciar Sesión
+          <button type="submit" disabled={loading} className="w-full p-3 rounded-lg bg-[#9C5F43] text-white font-semibold hover:bg-[#b8775a] disabled:opacity-50">
+            {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>
         </form>
         <p className="text-gray-400 text-sm mt-4 text-center">
