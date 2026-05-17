@@ -1,7 +1,7 @@
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **dashboardCars** (7 symbols, 6 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **AutoPulse** (44 symbols, 34 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -24,10 +24,10 @@ This project is indexed by GitNexus as **dashboardCars** (7 symbols, 6 relations
 
 | Resource | Use for |
 |----------|---------|
-| `gitnexus://repo/dashboardCars/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/dashboardCars/clusters` | All functional areas |
-| `gitnexus://repo/dashboardCars/processes` | All execution flows |
-| `gitnexus://repo/dashboardCars/process/{name}` | Step-by-step execution trace |
+| `gitnexus://repo/AutoPulse/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/AutoPulse/clusters` | All functional areas |
+| `gitnexus://repo/AutoPulse/processes` | All execution flows |
+| `gitnexus://repo/AutoPulse/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 
