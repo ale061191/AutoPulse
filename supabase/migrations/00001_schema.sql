@@ -10,11 +10,22 @@ CREATE TABLE dealers (
 
 -- Users (employees)
 CREATE TABLE dealer_users (
-  id UUID PRIMARY KEY REFERENCES auth.users(id),
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   dealer_id UUID NOT NULL REFERENCES dealers(id) ON DELETE CASCADE,
   nombre TEXT NOT NULL,
   email TEXT NOT NULL,
   rol TEXT NOT NULL DEFAULT 'vendedor' CHECK (rol IN ('admin', 'vendedor')),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Customers
+CREATE TABLE customers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  dealer_id UUID NOT NULL REFERENCES dealers(id) ON DELETE CASCADE,
+  nombre TEXT NOT NULL,
+  telefono TEXT,
+  email TEXT,
+  tipo TEXT NOT NULL DEFAULT 'prospecto' CHECK (tipo IN ('cliente', 'prospecto')),
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -38,31 +49,20 @@ CREATE TABLE vehicles (
 CREATE TABLE sales (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   dealer_id UUID NOT NULL REFERENCES dealers(id) ON DELETE CASCADE,
-  vehicle_id UUID NOT NULL REFERENCES vehicles(id),
-  vendedor_id UUID NOT NULL REFERENCES dealer_users(id),
-  cliente_id UUID NOT NULL REFERENCES customers(id),
+  vehicle_id UUID NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
+  vendedor_id UUID NOT NULL REFERENCES dealer_users(id) ON DELETE CASCADE,
+  cliente_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
   precio_venta NUMERIC NOT NULL,
   ganancia NUMERIC NOT NULL DEFAULT 0,
   fecha TIMESTAMPTZ DEFAULT now()
-);
-
--- Customers
-CREATE TABLE customers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  dealer_id UUID NOT NULL REFERENCES dealers(id) ON DELETE CASCADE,
-  nombre TEXT NOT NULL,
-  telefono TEXT,
-  email TEXT,
-  tipo TEXT NOT NULL DEFAULT 'prospecto' CHECK (tipo IN ('cliente', 'prospecto')),
-  created_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Appointments
 CREATE TABLE appointments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   dealer_id UUID NOT NULL REFERENCES dealers(id) ON DELETE CASCADE,
-  cliente_id UUID NOT NULL REFERENCES customers(id),
-  vendedor_id UUID NOT NULL REFERENCES dealer_users(id),
+  cliente_id UUID NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+  vendedor_id UUID NOT NULL REFERENCES dealer_users(id) ON DELETE CASCADE,
   fecha_hora TIMESTAMPTZ NOT NULL,
   estado TEXT NOT NULL DEFAULT 'programada' CHECK (estado IN ('programada', 'confirmada', 'completada', 'cancelada')),
   notas TEXT,
@@ -78,20 +78,23 @@ ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
 
 -- Dealer isolation policies
+CREATE POLICY dealer_isolation ON dealers
+  USING (id = (auth.jwt() ->> 'dealer_id')::uuid);
+
 CREATE POLICY dealer_isolation ON dealer_users
-  USING (dealer_id = ((auth.jwt() -> 'app_metadata'::text) ->> 'dealer_id'::text)::uuid);
+  USING (dealer_id = (auth.jwt() ->> 'dealer_id')::uuid);
 
 CREATE POLICY dealer_isolation ON vehicles
-  USING (dealer_id = ((auth.jwt() -> 'app_metadata'::text) ->> 'dealer_id'::text)::uuid);
+  USING (dealer_id = (auth.jwt() ->> 'dealer_id')::uuid);
 
 CREATE POLICY dealer_isolation ON sales
-  USING (dealer_id = ((auth.jwt() -> 'app_metadata'::text) ->> 'dealer_id'::text)::uuid);
+  USING (dealer_id = (auth.jwt() ->> 'dealer_id')::uuid);
 
 CREATE POLICY dealer_isolation ON customers
-  USING (dealer_id = ((auth.jwt() -> 'app_metadata'::text) ->> 'dealer_id'::text)::uuid);
+  USING (dealer_id = (auth.jwt() ->> 'dealer_id')::uuid);
 
 CREATE POLICY dealer_isolation ON appointments
-  USING (dealer_id = ((auth.jwt() -> 'app_metadata'::text) ->> 'dealer_id'::text)::uuid);
+  USING (dealer_id = (auth.jwt() ->> 'dealer_id')::uuid);
 
 -- Function to handle new user signup
 CREATE OR REPLACE FUNCTION handle_new_user()
