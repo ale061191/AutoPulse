@@ -1,0 +1,56 @@
+<div class="mockup">
+  <div class="mockup-header">AutoPulse — Ecosistema Completo</div>
+  <div class="mockup-body" style="padding:24px;">
+    
+    <h3 style="margin-bottom:16px;color:#fff;">Tres productos, un ecosistema</h3>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+      
+      <!-- Product 1 -->
+      <div style="background:#1a1a1a;border-radius:8px;padding:16px;border:1px solid #333;">
+        <div style="font-size:32px;margin-bottom:8px;">📊</div>
+        <div style="background:#9C5F43;color:#fff;padding:2px 8px;border-radius:4px;display:inline-block;font-size:10px;margin-bottom:8px;">FASE 1</div>
+        <h4 style="color:#fff;margin:0 0 8px 0;">AutoPulse Dashboard</h4>
+        <p style="font-size:11px;color:#999;">Panel administrativo para el concesionario. Ventas, inventario, clientes, reportes.</p>
+      </div>
+      
+      <!-- Product 2 -->
+      <div style="background:#1a1a1a;border-radius:8px;padding:16px;border:1px solid #333;">
+        <div style="font-size:32px;margin-bottom:8px;">🏪</div>
+        <div style="background:#555;color:#fff;padding:2px 8px;border-radius:4px;display:inline-block;font-size:10px;margin-bottom:8px;">FASE 2</div>
+        <h4 style="color:#fff;margin:0 0 8px 0;">AutoPulse Storefront</h4>
+        <p style="font-size:11px;color:#999;">Web + app para que clientes compren. Catálogo, búsqueda IA, cada dealer con su propia tienda.</p>
+      </div>
+      
+      <!-- Product 3 -->
+      <div style="background:#1a1a1a;border-radius:8px;padding:16px;border:1px solid #333;">
+        <div style="font-size:32px;margin-bottom:8px;">🤖</div>
+        <div style="background:#555;color:#fff;padding:2px 8px;border-radius:4px;display:inline-block;font-size:10px;margin-bottom:8px;">FASE 3</div>
+        <h4 style="color:#fff;margin:0 0 8px 0;">AutoPulse AI</h4>
+        <p style="font-size:11px;color:#999;">WhatsApp AI + buscador conversacional. Filtra leads, captura datos exportables.</p>
+      </div>
+    </div>
+    
+    <!-- Shared infra -->
+    <div style="background:#0d1a12;border-radius:8px;padding:16px;border:1px solid #0a7c4f;">
+      <div style="color:#0a7c4f;font-size:10px;text-transform:uppercase;margin-bottom:8px;">🔄 COMPARTEN</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <span style="background:#111;color:#ccc;padding:4px 12px;border-radius:12px;font-size:11px;">Misma DB en Supabase</span>
+        <span style="background:#111;color:#ccc;padding:4px 12px;border-radius:12px;font-size:11px;">RLS multi-tenant</span>
+        <span style="background:#111;color:#ccc;padding:4px 12px;border-radius:12px;font-size:11px;">Autenticación compartida</span>
+        <span style="background:#111;color:#ccc;padding:4px 12px;border-radius:12px;font-size:11px;">API en Next.js</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🌳 Descomposición recomendada</h3>
+  <p>Son 3 productos independientes que comparten datos. Sugiero construirlos en orden:</p>
+  <ol style="color:#ccc;">
+    <li><strong>Dashboard (F1)</strong> — base de datos, auth, multi-tenant. Todo lo demás se apoya en esto.</li>
+    <li><strong>Storefront (F2)</strong> — usa la misma DB del dashboard. Los dealers suben autos desde el dashboard y aparecen en su tienda.</li>
+    <li><strong>AI (F3)</strong> — whapi.io + búsqueda conversacional. Consume datos del inventario.</li>
+  </ol>
+  <p class="subtitle">Nota: la app móvil sugeriría dejarla para más adelante o usar React Native con la misma base.</p>
+</div>
